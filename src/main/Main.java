@@ -1,5 +1,6 @@
 package main;
 
+import actions.Action;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
@@ -7,6 +8,7 @@ import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
 import org.json.simple.JSONArray;
+import repository.Repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,8 +72,10 @@ public final class Main {
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
-        //TODO add here the entry point to your implementation
-
+        Repository repo = new Repository(input);
+        for (Action action : repo.getActions()) {
+           arrayResult.add(fileWriter.writeFile(action.getActionId(), "", action.execute(repo)));
+        }
         fileWriter.closeJSON(arrayResult);
     }
 }
