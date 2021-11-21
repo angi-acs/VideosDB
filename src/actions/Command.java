@@ -40,7 +40,7 @@ public class Command extends Action {
                 return view(user);
             }
             case Constants.RATING -> {
-                return rating(user);
+                return rating(repo, user);
             }
             default -> {
                 return null;
@@ -83,13 +83,15 @@ public class Command extends Action {
      * @param user a
      * @return a
      */
-    public String rating(final User user) {
+    public String rating(final Repository repo, final User user) {
         if (!user.getHistory().containsKey(this.title)) {
             return "error -> " + this.title + " is not seen";
         }
         if (user.getRatings().containsKey(this.title)) {
             return "error -> " + this.title + " has been already rated";
         }
+
+        repo.addRating(this.title, this.grade, this.seasonNumber);
         user.getRatings().put(this.title, this.grade);
         return "success -> " + this.title + " was rated with " + this.grade
                 + " by " + this.username;

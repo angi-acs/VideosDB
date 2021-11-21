@@ -4,6 +4,7 @@ import actions.Action;
 import actor.Actor;
 import entertainment.Movie;
 import entertainment.Show;
+import entertainment.Video;
 import fileio.Input;
 import lombok.Getter;
 import user.User;
@@ -18,11 +19,13 @@ public final class Repository {
     private final List<User> users = new ArrayList<>();
     private final List<Movie> movies = new ArrayList<>();
     private final List<Show> shows = new ArrayList<>();
+    private final List<Video> videos = new ArrayList<>();
     private final List<Action> actions = new ArrayList<>();
 
     public Repository(final Input input) {
         Helpers helpers = new Helpers();
         helpers.addData(input, this);
+        this.addVideos();
     }
 
     /**
@@ -54,6 +57,14 @@ public final class Repository {
     }
 
     /**
+     * Database
+     */
+    public void addVideos() {
+        this.videos.addAll(this.movies);
+        this.videos.addAll(this.shows);
+    }
+
+    /**
      * Add actions to the repository
      */
     public void addActions(final List<Action> actionInput) {
@@ -72,5 +83,27 @@ public final class Repository {
             }
         }
         return null;
+    }
+
+    /**
+     *
+     * @param title a
+     * @param grade b
+     * @param seasonNumber c
+     */
+    public void addRating(final String title, final double grade, final int seasonNumber) {
+        for (Movie movie : movies) {
+            if (movie.getTitle().equals(title)) {
+                movie.getRatings().add(grade);
+                return;
+            }
+        }
+        for (Show show : shows) {
+            if (show.getTitle().equals(title)) {
+                if (seasonNumber < show.getNumberOfSeasons()) {
+                    show.getSeasons().get(seasonNumber).getRatings().add(grade);
+                }
+            }
+        }
     }
 }

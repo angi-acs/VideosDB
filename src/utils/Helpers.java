@@ -96,7 +96,12 @@ public class Helpers {
                     actions.add(command);
                 }
                 case Constants.QUERY -> {
-                    Query query = new Query(actionData.getActionId());
+                    Query query = new Query(actionData.getActionId(),
+                            actionData.getObjectType(), actionData.getNumber(),
+                            actionData.getSortType(), actionData.getCriteria(),
+                            actionData.getFilters().get(0).get(0),
+                            actionData.getFilters().get(1).get(0),
+                            actionData.getFilters().get(2), actionData.getFilters().get(3));
                     actions.add(query);
                 }
                 case Constants.RECOMMENDATION -> {

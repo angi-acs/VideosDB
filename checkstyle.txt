@@ -1,4 +1,6 @@
 Starting audit...
+[ERROR] D:\ACS\Anul II\POO\VideosDB\.\src\actions\Recommendation.java:9:17: Using the '.*' form of import should be avoided - java.util.*. [AvoidStarImport]
 [ERROR] D:\ACS\Anul II\POO\VideosDB\.\src\utils\Helpers.java:11:14: Using the '.*' form of import should be avoided - fileio.*. [AvoidStarImport]
+[ERROR] D:\ACS\Anul II\POO\VideosDB\.\src\utils\Helpers.java:104:89: '3' is a magic number. [MagicNumber]
 Audit done.
-Checkstyle ends with 1 errors.
+Checkstyle ends with 3 errors.
