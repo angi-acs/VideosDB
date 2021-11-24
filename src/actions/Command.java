@@ -4,6 +4,8 @@ import common.Constants;
 import repository.Repository;
 import user.User;
 
+import java.util.ArrayList;
+
 public class Command extends Action {
     private final String type;
     private final String username;
@@ -88,11 +90,28 @@ public class Command extends Action {
             return "error -> " + this.title + " is not seen";
         }
         if (user.getRatings().containsKey(this.title)) {
-            return "error -> " + this.title + " has been already rated";
+            if (this.seasonNumber == 0) {
+                return "error -> " + this.title + " has been already rated";
+            } else {
+                ArrayList<Integer> seasons = user.getRatings().get(this.title);
+                for (Integer i : seasons) {
+                    if (i == this.seasonNumber) {
+                        return "error -> " + this.title + " has been already rated";
+                    }
+                }
+            }
         }
 
+        ArrayList<Integer> seasons;
+        if (!user.getRatings().containsKey(this.title)) {
+            seasons = new ArrayList<>();
+        } else {
+            seasons = user.getRatings().get(this.title);
+        }
+        seasons.add(this.seasonNumber);
+        user.getRatings().put(this.title, seasons);
+
         repo.addRating(this.title, this.grade, this.seasonNumber);
-        user.getRatings().put(this.title, this.grade);
         return "success -> " + this.title + " was rated with " + this.grade
                 + " by " + this.username;
     }

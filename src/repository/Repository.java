@@ -10,17 +10,16 @@ import lombok.Getter;
 import user.User;
 import utils.Helpers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 public final class Repository {
-    private final List<Actor> actors = new ArrayList<>();
-    private final List<User> users = new ArrayList<>();
-    private final List<Movie> movies = new ArrayList<>();
-    private final List<Show> shows = new ArrayList<>();
-    private final List<Video> videos = new ArrayList<>();
-    private final List<Action> actions = new ArrayList<>();
+    private final ArrayList<Actor> actors = new ArrayList<>();
+    private final ArrayList<User> users = new ArrayList<>();
+    private final ArrayList<Movie> movies = new ArrayList<>();
+    private final ArrayList<Show> shows = new ArrayList<>();
+    private final ArrayList<Video> videos = new ArrayList<>();
+    private final ArrayList<Action> actions = new ArrayList<>();
 
     public Repository(final Input input) {
         Helpers helpers = new Helpers();
@@ -31,28 +30,28 @@ public final class Repository {
     /**
      * Add actors to the repository
      */
-    public void addActors(final List<Actor> actorInput) {
+    public void addActors(final ArrayList<Actor> actorInput) {
         this.actors.addAll(actorInput);
     }
 
     /**
      * Add users to the repository
      */
-    public void addUsers(final List<User> userInput) {
+    public void addUsers(final ArrayList<User> userInput) {
         this.users.addAll(userInput);
     }
 
     /**
      * Add movies to the repository
      */
-    public void addMovies(final List<Movie> movieInput) {
+    public void addMovies(final ArrayList<Movie> movieInput) {
         this.movies.addAll(movieInput);
     }
 
     /**
      * Add shows to the repository
      */
-    public void addShows(final List<Show> showInput) {
+    public void addShows(final ArrayList<Show> showInput) {
         this.shows.addAll(showInput);
     }
 
@@ -67,7 +66,7 @@ public final class Repository {
     /**
      * Add actions to the repository
      */
-    public void addActions(final List<Action> actionInput) {
+    public void addActions(final ArrayList<Action> actionInput) {
         this.actions.addAll(actionInput);
     }
 
@@ -80,6 +79,20 @@ public final class Repository {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return user;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * a
+     * @param title b
+     * @return c
+     */
+    public Video findVideo(final String title) {
+        for (Video video : videos) {
+            if (video.getTitle().equals(title)) {
+                return video;
             }
         }
         return null;
@@ -100,10 +113,45 @@ public final class Repository {
         }
         for (Show show : shows) {
             if (show.getTitle().equals(title)) {
-                if (seasonNumber < show.getNumberOfSeasons()) {
-                    show.getSeasons().get(seasonNumber).getRatings().add(grade);
+                show.getSeasons().get(seasonNumber - 1).getRatings().add(grade);
+                return;
+            }
+        }
+    }
+
+    /**
+     * a
+     * @return b
+     */
+    public LinkedHashMap<String, Double> getFavorites(final List<Video> videoList) {
+        LinkedHashMap<String, Double> favorites = new LinkedHashMap<>();
+        for (Video video : videoList) {
+            favorites.put(video.getTitle(), (double) 0);
+            for (User user : users) {
+                if (user.getFavorites().contains(video.getTitle())) {
+                    favorites.put(video.getTitle(), favorites.get(video.getTitle()) + 1);
                 }
             }
         }
+        return favorites;
+    }
+
+    /**
+     * a
+     * @param videoList b
+     * @return c
+     */
+    public LinkedHashMap<String, Double> getViews(final List<Video> videoList) {
+        LinkedHashMap<String, Double> views = new LinkedHashMap<>();
+        for (Video video : videoList) {
+            views.put(video.getTitle(), (double) 0);
+            for (User user : users) {
+                if (user.getHistory().containsKey(video.getTitle())) {
+                    views.put(video.getTitle(),
+                            views.get(video.getTitle()) + user.getHistory().get(video.getTitle()));
+                }
+            }
+        }
+        return views;
     }
 }

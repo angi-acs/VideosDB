@@ -12,7 +12,7 @@ public final class User {
     private final String subscriptionType;
     private final Map<String, Integer> history;
     private final ArrayList<String> favorites;
-    private final Map<String, Double> ratings;
+    private final Map<String, ArrayList<Integer>> ratings;
 
     public User(final String username, final String subscriptionType,
                          final Map<String, Integer> history,

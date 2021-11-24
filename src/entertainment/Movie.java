@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 public final class Movie extends Video {
     private final int duration;
-    private final List<Double> ratings;
+    private final ArrayList<Double> ratings;
 
     public Movie(final String title, final List<String> cast,
                  final List<String> genres, final int year,
@@ -32,4 +32,5 @@ public final class Movie extends Video {
         }
         return rating / ratings.size();
     }
+
 }

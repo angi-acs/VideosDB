@@ -32,7 +32,7 @@ public class Helpers {
      * Add actors from input to the repository
      */
     public void addActors(final List<ActorInputData> actorList, final Repository repo) {
-        List<Actor> actors = new ArrayList<>();
+        ArrayList<Actor> actors = new ArrayList<>();
         for (ActorInputData actorData : actorList) {
             Actor actor = new Actor(actorData.getName(), actorData.getCareerDescription(),
                     actorData.getFilmography(), actorData.getAwards());
@@ -45,7 +45,7 @@ public class Helpers {
      * Add users from input to the repository
      */
     public void addUsers(final List<UserInputData> userList, final Repository repo) {
-        List<User> users = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
         for (UserInputData userData : userList) {
             User user = new User(userData.getUsername(), userData.getSubscriptionType(),
                     userData.getHistory(), userData.getFavoriteMovies());
@@ -58,7 +58,7 @@ public class Helpers {
      * Add movies from input to the repository
      */
     public void addMovies(final List<MovieInputData> movieList, final Repository repo) {
-        List<Movie> movies = new ArrayList<>();
+        ArrayList<Movie> movies = new ArrayList<>();
         for (MovieInputData movieData : movieList) {
             Movie movie = new Movie(movieData.getTitle(), movieData.getCast(),
                     movieData.getGenres(), movieData.getYear(), movieData.getDuration());
@@ -71,7 +71,7 @@ public class Helpers {
      * Add shows from input to the repository
      */
     public void addShows(final List<SerialInputData> showList, final Repository repo) {
-        List<Show> shows = new ArrayList<>();
+        ArrayList<Show> shows = new ArrayList<>();
         for (SerialInputData showData : showList) {
             Show show = new Show(showData.getTitle(), showData.getCast(),
                     showData.getGenres(), showData.getNumberSeason(),
@@ -85,7 +85,7 @@ public class Helpers {
      * Add actions from input to the repository
      */
     public void addActions(final List<ActionInputData> actionList, final Repository repo) {
-        List<Action> actions = new ArrayList<>();
+        ArrayList<Action> actions = new ArrayList<>();
         for (ActionInputData actionData : actionList) {
 
             switch (actionData.getActionType()) {
@@ -99,9 +99,10 @@ public class Helpers {
                     Query query = new Query(actionData.getActionId(),
                             actionData.getObjectType(), actionData.getNumber(),
                             actionData.getSortType(), actionData.getCriteria(),
-                            actionData.getFilters().get(0).get(0),
-                            actionData.getFilters().get(1).get(0),
-                            actionData.getFilters().get(2), actionData.getFilters().get(3));
+                            actionData.getFilters().get(Constants.YEAR_FILTER).get(0),
+                            actionData.getFilters().get(Constants.GENRE_FILTER).get(0),
+                            actionData.getFilters().get(Constants.WORDS_FILTER),
+                            actionData.getFilters().get(Constants.AWARDS_FILTER));
                     actions.add(query);
                 }
                 case Constants.RECOMMENDATION -> {

@@ -24,4 +24,24 @@ public abstract class Video {
      * @return a
      */
     public abstract Double getRating();
+
+    /**
+     * a
+     * @return b
+     */
+    public abstract int getDuration();
+
+    /**
+     * a
+     * @param genre b
+     * @return c
+     */
+    public String findGenre(final String genre) {
+        for (String g : genres) {
+            if (g.equals(genre)) {
+                return g;
+            }
+        }
+        return null;
+    }
 }

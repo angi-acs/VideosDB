@@ -83,4 +83,16 @@ public final class Constants {
     public static final String POPULAR = "popular";
     public static final String SEARCH = "search";
     public static final String PREMIUM = "PREMIUM";
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
+    public static final String RATINGS = "ratings";
+    public static final String LONGEST = "longest";
+    public static final String MOST_VIEWED = "most_viewed";
+    public static final String AVERAGE = "average";
+    public static final Integer YEAR_FILTER = 0;
+    public static final Integer GENRE_FILTER = 1;
+    public static final Integer WORDS_FILTER = 2;
+    public static final Integer AWARDS_FILTER = 3;
+
+
 }

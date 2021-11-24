@@ -8,7 +8,7 @@ import user.User;
 
 import java.util.*;
 
-public class Recommendation extends Action {
+public class Recommendation extends Action implements Sort {
     private final String type;
     private final String username;
     private final String genre;
@@ -74,8 +74,10 @@ public class Recommendation extends Action {
      * @return c
      */
     public String bestUnseen(final Repository repo, final User user) {
-        List<Video> sortedList = repo.getVideos();
+        List<Video> sortedList = new ArrayList<>();
+        sortedList.addAll(repo.getVideos());
         sortedList.sort((o1, o2) -> Double.compare(o2.getRating(), o1.getRating()));
+
         for (Video video : sortedList) {
             if (!user.getHistory().containsKey(video.getTitle())) {
                 return "BestRatedUnseenRecommendation result: " + video.getTitle();
@@ -95,18 +97,43 @@ public class Recommendation extends Action {
             return "PopularRecommendation cannot be applied!";
         }
 
-        LinkedHashMap<String, Integer> genres = new LinkedHashMap<>();
+        LinkedHashMap<String, Double> genres = new LinkedHashMap<>();
+        for (User u : repo.getUsers()) {
+            for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
+                Video video = repo.findVideo(entry.getKey());
+                assert video != null;
+                for (String g : video.getGenres()) {
+                    if (!genres.containsKey(g)) {
+                        genres.put(g, (double) 0);
+                    }
+                    genres.put(g, genres.get(g) + entry.getValue());
+                }
+            }
+        }
+        ArrayList<String> result = sort(genres, "desc", genres.size());
+
+        for (int i = 0; i < result.size(); i++) {
+        for (Video video : repo.getVideos()) {
+                if (video.findGenre(result.get(i)) != null
+                        && !user.getHistory().containsKey(video.getTitle())) {
+                    return "PopularRecommendation result: " + video.getTitle();
+                }
+            }
+        }
+
+        /*LinkedHashMap<String, Integer> genres = new LinkedHashMap<>();
         for (Genre g : Genre.values()) {
             genres.put(g.toString(), 0);
         }
-        for (Video video : repo.getVideos()) {
-            for (User u : repo.getUsers()) {
-                for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
-                    if (video.getTitle().equals(entry.getKey())) {
-                        for (String g : video.getGenres()) {
-                            genres.put(g, 0);
-                            genres.put(g, genres.get(g) + entry.getValue());
-                        }
+        for (User u : repo.getUsers()) {
+            for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
+                Video video = repo.findVideo(entry.getKey());
+                assert video != null;
+                for (String g : video.getGenres()) {
+                    if (!video.getGenres().contains(g)) {
+                        genres.put(g, 0);
+                    } else {
+                        genres.put(g, genres.get(g) + entry.getValue());
                     }
                 }
             }
@@ -122,7 +149,7 @@ public class Recommendation extends Action {
                     return "PopularRecommendation result: " + video.getTitle();
                 }
             }
-        }
+        }*/
         return "PopularRecommendation cannot be applied!";
     }
 
@@ -136,22 +163,13 @@ public class Recommendation extends Action {
         if (!user.getSubscriptionType().equals(Constants.PREMIUM)) {
             return "FavoriteRecommendation cannot be applied!";
         }
+        LinkedHashMap<String, Double> favorites = repo.getFavorites(repo.getVideos());
+        ArrayList<String> sortedFavorites = sort(favorites, "mydesc",
+                repo.getFavorites(repo.getVideos()).size());
 
-        LinkedHashMap<String, Integer> favorites = new LinkedHashMap<>();
-        for (User u : repo.getUsers()) {
-            for (String f : u.getFavorites()) {
-                favorites.put(f, 0);
-                favorites.put(f, favorites.get(f) + 1);
-            }
-        }
-
-        ArrayList<Map.Entry<String, Integer>> sortedFavorites =
-                new ArrayList<>(favorites.entrySet());
-        sortedFavorites.sort((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()));
-
-        for (Map.Entry<String, Integer> entry : sortedFavorites) {
-            if (!user.getHistory().containsKey(entry.getKey()) && entry.getValue() != 0) {
-                return "FavoriteRecommendation result: " + entry.getKey();
+        for (String favorite : sortedFavorites) {
+            if (!user.getHistory().containsKey(favorite)) {
+                return "FavoriteRecommendation result: " + favorite;
             }
         }
         return "FavoriteRecommendation cannot be applied!";

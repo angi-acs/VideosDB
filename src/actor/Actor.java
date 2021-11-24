@@ -20,4 +20,16 @@ public class Actor {
         this.filmography = filmography;
         this.awards = awards;
     }
+
+    /**
+     * a
+     * @return b
+     */
+    public int getAwardsNumber() {
+        int count = 0;
+        for (Map.Entry<ActorsAwards, Integer> award : awards.entrySet()) {
+            count += award.getValue();
+        }
+        return count;
+    }
 }
