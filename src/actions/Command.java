@@ -24,16 +24,12 @@ public class Command extends Action {
     }
 
     /**
-     *
-     * @param repo The repository that contains the database
-     * @return The string
+     * Method that switches between the Command's types
+     * @param repo The repository containing the database
      */
     public String execute(final Repository repo) {
         User user = repo.findUser(this.username);
-        if (user == null) {
-            return null;
-        }
-
+        assert user != null;
         switch (this.type) {
             case Constants.FAVORITE -> {
                 return favorite(user);
@@ -44,18 +40,15 @@ public class Command extends Action {
             case Constants.RATING -> {
                 return rating(repo, user);
             }
-            default -> {
-                return null;
-            }
+            default -> throw new IllegalStateException("Unexpected value: " + this.type);
         }
     }
 
     /**
-     * a
-     * @param user a
-     * @return a
+     * @param user The user for whom the command is applied
+     * @return Message for Favorite Command
      */
-    public String favorite(final User user) {
+    private String favorite(final User user) {
         if (!user.getHistory().containsKey(this.title)) {
             return "error -> " + this.title + " is not seen";
         }
@@ -67,11 +60,10 @@ public class Command extends Action {
     }
 
     /**
-     * a
-     * @param user a
-     * @return a
+     * @param user The user for whom the command is applied
+     * @return Message for View Command
      */
-    public String view(final User user) {
+    private String view(final User user) {
         if (!user.getHistory().containsKey(this.title)) {
             user.getHistory().put(this.title, 0);
         }
@@ -81,23 +73,22 @@ public class Command extends Action {
     }
 
     /**
-     * a
-     * @param user a
-     * @return a
+     * @param repo Rating is also added to the Database
+     * @param user The user for whom the command is applied
+     * @return Message for Rating Command
      */
-    public String rating(final Repository repo, final User user) {
+    private String rating(final Repository repo, final User user) {
         if (!user.getHistory().containsKey(this.title)) {
             return "error -> " + this.title + " is not seen";
         }
         if (user.getRatings().containsKey(this.title)) {
             if (this.seasonNumber == 0) {
                 return "error -> " + this.title + " has been already rated";
-            } else {
-                ArrayList<Integer> seasons = user.getRatings().get(this.title);
-                for (Integer i : seasons) {
-                    if (i == this.seasonNumber) {
-                        return "error -> " + this.title + " has been already rated";
-                    }
+            }
+            ArrayList<Integer> seasons = user.getRatings().get(this.title);
+            for (Integer i : seasons) {
+                if (i == this.seasonNumber) {
+                    return "error -> " + this.title + " has been already rated";
                 }
             }
         }
@@ -110,7 +101,6 @@ public class Command extends Action {
         }
         seasons.add(this.seasonNumber);
         user.getRatings().put(this.title, seasons);
-
         repo.addRating(this.title, this.grade, this.seasonNumber);
         return "success -> " + this.title + " was rated with " + this.grade
                 + " by " + this.username;

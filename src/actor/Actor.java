@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Getter
-public class Actor {
+public final class Actor {
     private final String name;
     private final String careerDescription;
     private final ArrayList<String> filmography;
@@ -22,10 +22,9 @@ public class Actor {
     }
 
     /**
-     * a
-     * @return b
+     * @return The total number of awards which an actor has
      */
-    public int getAwardsNumber() {
+    public int getAwardsTotal() {
         int count = 0;
         for (Map.Entry<ActorsAwards, Integer> award : awards.entrySet()) {
             count += award.getValue();

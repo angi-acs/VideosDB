@@ -19,8 +19,7 @@ public final class Movie extends Video {
     }
 
     /**
-     *
-     * @return a
+     * @return average rating of a movie
      */
     public Double getRating() {
         double rating = 0;
@@ -32,5 +31,4 @@ public final class Movie extends Video {
         }
         return rating / ratings.size();
     }
-
 }

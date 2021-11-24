@@ -12,8 +12,7 @@ public abstract class Action {
     }
 
     /**
-     *
-     * @return mesaj
+     * Method implemented in its subclasses
      */
     public abstract String execute(Repository repo);
 }

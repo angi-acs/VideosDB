@@ -56,7 +56,7 @@ public final class Repository {
     }
 
     /**
-     * Database
+     * Add videos to the repository
      */
     public void addVideos() {
         this.videos.addAll(this.movies);
@@ -71,9 +71,7 @@ public final class Repository {
     }
 
     /**
-     * Find user by name
-     * @param username a
-     * @return b
+     * Method that returns the instance of a user with a given username
      */
     public User findUser(final String username) {
         for (User user : users) {
@@ -85,9 +83,7 @@ public final class Repository {
     }
 
     /**
-     * a
-     * @param title b
-     * @return c
+     * Method that returns the instance of a video with a given title
      */
     public Video findVideo(final String title) {
         for (Video video : videos) {
@@ -99,10 +95,9 @@ public final class Repository {
     }
 
     /**
-     *
-     * @param title a
-     * @param grade b
-     * @param seasonNumber c
+     * After Rating Command, the grade should also be added to the repository
+     * @param title of video for which the rating was given
+     * @param seasonNumber (only the case for shows)
      */
     public void addRating(final String title, final double grade, final int seasonNumber) {
         for (Movie movie : movies) {
@@ -120,8 +115,8 @@ public final class Repository {
     }
 
     /**
-     * a
-     * @return b
+     * @return a map containing the title of a video and
+     * the number of times it has been added to a favorite list
      */
     public LinkedHashMap<String, Double> getFavorites(final List<Video> videoList) {
         LinkedHashMap<String, Double> favorites = new LinkedHashMap<>();
@@ -137,9 +132,8 @@ public final class Repository {
     }
 
     /**
-     * a
-     * @param videoList b
-     * @return c
+     * @return a map containing the title of a video and
+     * the number of times it has been viewed (by all users)
      */
     public LinkedHashMap<String, Double> getViews(final List<Video> videoList) {
         LinkedHashMap<String, Double> views = new LinkedHashMap<>();

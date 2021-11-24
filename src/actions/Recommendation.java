@@ -1,12 +1,15 @@
 package actions;
 
 import common.Constants;
-import entertainment.Genre;
 import entertainment.Video;
 import repository.Repository;
 import user.User;
+import utils.Sort;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 public class Recommendation extends Action implements Sort {
     private final String type;
@@ -22,14 +25,13 @@ public class Recommendation extends Action implements Sort {
     }
 
     /**
-     *
-     * @return mesaj
+     * Method that switches between the Recommendation's types
+     * @param repo The repository containing the database which
+     *             will be transmitted to all the methods
      */
     public String execute(final Repository repo) {
         User user = repo.findUser(this.username);
-        if (user == null) {
-            return null;
-        }
+        assert user != null;
         switch (this.type) {
             case Constants.STANDARD -> {
                 return standard(repo, user);
@@ -46,19 +48,15 @@ public class Recommendation extends Action implements Sort {
             case Constants.SEARCH -> {
                 return search(repo, user);
             }
-            default -> {
-                return null;
-            }
+            default -> throw new IllegalStateException("Unexpected value: " + this.type);
         }
     }
 
     /**
-     *
-     * @param repo a
-     * @param user b
-     * @return c
+     * @param user The user for whom the recommendation is applied
+     * @return Message for Standard Recommendation
      */
-    public String standard(final Repository repo, final User user) {
+    private String standard(final Repository repo, final User user) {
         for (Video video : repo.getVideos()) {
             if (!user.getHistory().containsKey(video.getTitle())) {
                 return "StandardRecommendation result: " + video.getTitle();
@@ -68,14 +66,11 @@ public class Recommendation extends Action implements Sort {
     }
 
     /**
-     *
-     * @param repo a
-     * @param user b
-     * @return c
+     * @param user The user for whom the recommendation is applied
+     * @return Message for Best Unseen Recommendation
      */
-    public String bestUnseen(final Repository repo, final User user) {
-        List<Video> sortedList = new ArrayList<>();
-        sortedList.addAll(repo.getVideos());
+    private String bestUnseen(final Repository repo, final User user) {
+        ArrayList<Video> sortedList = new ArrayList<>(repo.getVideos());
         sortedList.sort((o1, o2) -> Double.compare(o2.getRating(), o1.getRating()));
 
         for (Video video : sortedList) {
@@ -87,12 +82,10 @@ public class Recommendation extends Action implements Sort {
     }
 
     /**
-     * a
-     * @param repo b
-     * @param user c
-     * @return d
+     * @param user The user for whom the recommendation is applied
+     * @return Message for Popular Recommendation
      */
-    public String popular(final Repository repo, final User user) {
+    private String popular(final Repository repo, final User user) {
         if (!user.getSubscriptionType().equals(Constants.PREMIUM)) {
             return "PopularRecommendation cannot be applied!";
         }
@@ -112,88 +105,53 @@ public class Recommendation extends Action implements Sort {
         }
         ArrayList<String> result = sort(genres, "desc", genres.size());
 
-        for (int i = 0; i < result.size(); i++) {
-        for (Video video : repo.getVideos()) {
-                if (video.findGenre(result.get(i)) != null
-                        && !user.getHistory().containsKey(video.getTitle())) {
-                    return "PopularRecommendation result: " + video.getTitle();
-                }
-            }
-        }
-
-        /*LinkedHashMap<String, Integer> genres = new LinkedHashMap<>();
-        for (Genre g : Genre.values()) {
-            genres.put(g.toString(), 0);
-        }
-        for (User u : repo.getUsers()) {
-            for (Map.Entry<String, Integer> entry : u.getHistory().entrySet()) {
-                Video video = repo.findVideo(entry.getKey());
-                assert video != null;
-                for (String g : video.getGenres()) {
-                    if (!video.getGenres().contains(g)) {
-                        genres.put(g, 0);
-                    } else {
-                        genres.put(g, genres.get(g) + entry.getValue());
-                    }
-                }
-            }
-        }
-
-        ArrayList<Map.Entry<String, Integer>> sortedGenres = new ArrayList<>(genres.entrySet());
-        sortedGenres.sort((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()));
-
-        for (Map.Entry<String, Integer> entry : sortedGenres) {
+        for (String s : result) {
             for (Video video : repo.getVideos()) {
-                if (video.getGenres().contains(entry.getKey())
-                        && !user.getHistory().containsKey(video.getTitle())) {
+                if (video.hasGenre(s) && !user.getHistory().containsKey(video.getTitle())) {
                     return "PopularRecommendation result: " + video.getTitle();
                 }
             }
-        }*/
+        }
         return "PopularRecommendation cannot be applied!";
     }
 
     /**
-     * a
-     * @param repo b
-     * @param user c
-     * @return d
+     * @param user The user for whom the recommendation is applied
+     * @return Message for Favorite Recommendation
      */
-    public String favorite(final Repository repo, final User user) {
+    private String favorite(final Repository repo, final User user) {
         if (!user.getSubscriptionType().equals(Constants.PREMIUM)) {
             return "FavoriteRecommendation cannot be applied!";
         }
-        LinkedHashMap<String, Double> favorites = repo.getFavorites(repo.getVideos());
-        ArrayList<String> sortedFavorites = sort(favorites, "mydesc",
-                repo.getFavorites(repo.getVideos()).size());
 
-        for (String favorite : sortedFavorites) {
-            if (!user.getHistory().containsKey(favorite)) {
-                return "FavoriteRecommendation result: " + favorite;
+        LinkedHashMap<String, Double> favorites = repo.getFavorites(repo.getVideos());
+        ArrayList<Map.Entry<String, Double>> sortedFavorites =
+                new ArrayList<>(favorites.entrySet());
+        sortedFavorites.sort((item1, item2) -> Double.compare(item2.getValue(), item1.getValue()));
+
+        for (Map.Entry<String, Double> entry : sortedFavorites) {
+            if (!user.getHistory().containsKey(entry.getKey())) {
+                return "FavoriteRecommendation result: " + entry.getKey();
             }
         }
         return "FavoriteRecommendation cannot be applied!";
     }
 
     /**
-     * a
-     * @param repo b
-     * @param user c
-     * @return d
+     * @param user The user for whom the recommendation is applied
+     * @return Message for Search Recommendation
      */
-    public String search(final Repository repo, final User user) {
+    private String search(final Repository repo, final User user) {
         if (!user.getSubscriptionType().equals(Constants.PREMIUM)) {
             return "SearchRecommendation cannot be applied!";
         }
 
-        List<Video> genreVideos = new ArrayList<>();
+        ArrayList<Video> genreVideos = new ArrayList<>();
         for (Video video : repo.getVideos()) {
-            if (video.getGenres().contains(this.genre)
-                    && !user.getHistory().containsKey(video.getTitle())) {
+            if (video.hasGenre(this.genre) && !user.getHistory().containsKey(video.getTitle())) {
                 genreVideos.add(video);
             }
         }
-
         genreVideos.sort((o1, o2) -> {
             if (o1.getRating().equals(o2.getRating())) {
                 return o1.getTitle().compareTo(o2.getTitle());
@@ -206,7 +164,6 @@ public class Recommendation extends Action implements Sort {
         for (Video video : genreVideos) {
             result.add(video.getTitle());
         }
-
         if (!genreVideos.isEmpty()) {
             return "SearchRecommendation result: " + result;
         }

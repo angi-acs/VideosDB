@@ -29,7 +29,7 @@ public class Helpers {
     }
 
     /**
-     * Add actors from input to the repository
+     * Add actors from Actors' input to the repository
      */
     public void addActors(final List<ActorInputData> actorList, final Repository repo) {
         ArrayList<Actor> actors = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Helpers {
     }
 
     /**
-     * Add users from input to the repository
+     * Add users from Users' input to the repository
      */
     public void addUsers(final List<UserInputData> userList, final Repository repo) {
         ArrayList<User> users = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Helpers {
     }
 
     /**
-     * Add movies from input to the repository
+     * Add movies from Movies' input to the repository
      */
     public void addMovies(final List<MovieInputData> movieList, final Repository repo) {
         ArrayList<Movie> movies = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Helpers {
     }
 
     /**
-     * Add shows from input to the repository
+     * Add shows from Serials' input to the repository
      */
     public void addShows(final List<SerialInputData> showList, final Repository repo) {
         ArrayList<Show> shows = new ArrayList<>();
@@ -82,7 +82,8 @@ public class Helpers {
     }
 
     /**
-     * Add actions from input to the repository
+     * Add actions from Actions' input to the repository
+     * Create new Action subclasses based on ActionType
      */
     public void addActions(final List<ActionInputData> actionList, final Repository repo) {
         ArrayList<Action> actions = new ArrayList<>();
@@ -110,8 +111,9 @@ public class Helpers {
                             actionData.getType(), actionData.getUsername(), actionData.getGenre());
                     actions.add(recommendation);
                 }
-                default -> {
-                }
+
+                default -> throw new
+                        IllegalStateException("Unexpected value: " + actionData.getActionType());
             }
         }
         repo.addActions(actions);

@@ -18,8 +18,7 @@ public final class Show extends Video {
     }
 
     /**
-     *
-     * @return a
+     * @return average rating of a show
      */
     public Double getRating() {
         double ratingShow = 0;

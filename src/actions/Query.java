@@ -5,14 +5,20 @@ import common.Constants;
 import entertainment.Video;
 import repository.Repository;
 import user.User;
+import utils.Filter;
+import utils.Sort;
 import utils.Utils;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Query extends Action implements Sort {
+public class Query extends Action implements Sort, Filter {
     private final String objectType;
     private final int number;
     private final String sortType;
@@ -34,8 +40,11 @@ public class Query extends Action implements Sort {
     }
 
     /**
-     *
-     * @return mesaj
+     * Method that switches between the Query's object types,
+     * respectively between actors' criteria
+     * @param repo The repository containing the database which
+     *             will be transmitted to all the methods
+     * @return Message for Query
      */
     public String execute(final Repository repo) {
         switch (this.objectType) {
@@ -60,19 +69,17 @@ public class Query extends Action implements Sort {
             case Constants.USERS -> {
                 return "Query result: " + users(repo);
             }
-            default -> {
-                return null;
-            }
+            default -> throw new IllegalStateException("Unexpected value: " + this.objectType);
         }
     }
 
     /**
-     * a
-     * @param repo b
-     * @return c
+     * @return ArrayList that contains
+     * the actors sorted by average rating
      */
-    public ArrayList<String> actorsAverage(final Repository repo) {
+    private ArrayList<String> actorsAverage(final Repository repo) {
         LinkedHashMap<String, Double> ratedActors = new LinkedHashMap<>();
+
         for (Actor actor : repo.getActors()) {
             ratedActors.put(actor.getName(), (double) 0);
             int ratedVideos = 0;
@@ -92,11 +99,10 @@ public class Query extends Action implements Sort {
     }
 
     /**
-     * a
-     * @param repo b
-     * @return c
+     * @return ArrayList that contains the actors
+     * sorted by the number of total awards received
      */
-    public ArrayList<String> actorsAwards(final Repository repo) {
+    private ArrayList<String> actorsAwards(final Repository repo) {
         List<String> awardsMust = filters.get(Constants.AWARDS_FILTER);
         LinkedHashMap<String, Double> awards = new LinkedHashMap<>();
 
@@ -108,7 +114,7 @@ public class Query extends Action implements Sort {
                     break;
                 } else {
                     awards.put(actor.getName(), awards.get(actor.getName())
-                            + actor.getAwardsNumber());
+                            + actor.getAwardsTotal());
                 }
             }
         }
@@ -116,11 +122,10 @@ public class Query extends Action implements Sort {
     }
 
     /**
-     * a
-     * @param repo b
-     * @return c
+     * @return Alphabetically sorted ArrayList that contains
+     * the actors whose career description contains certain words
      */
-    public ArrayList<String> actorWords(final Repository repo) {
+    private ArrayList<String> actorWords(final Repository repo) {
         List<String> words = filters.get(Constants.WORDS_FILTER);
         LinkedHashMap<String, Double> actors = new LinkedHashMap<>();
 
@@ -141,11 +146,11 @@ public class Query extends Action implements Sort {
     }
 
     /**
-     * a
-     * @param repo b
-     * @return c
+     * @return ArrayList that contains videos (movies or shows, depending on the
+     * objectType) sorted by different criteria (rating average, the appearance in
+     * users' favorite lists, the longest duration or the most user views)
      */
-    public ArrayList<String> videos(final Repository repo) {
+    private ArrayList<String> videos(final Repository repo) {
         List<Video> videos = new ArrayList<>();
         switch (this.objectType) {
             case Constants.MOVIES -> videos.addAll(repo.getMovies());
@@ -178,11 +183,10 @@ public class Query extends Action implements Sort {
     }
 
     /**
-     * a
-     * @param repo b
-     * @return c
+     * @return ArrayList that contains the users
+     * sorted by the number of ratings they had given
      */
-    public ArrayList<String> users(final Repository repo) {
+    private ArrayList<String> users(final Repository repo) {
         LinkedHashMap<String, Double> ratingUsers = new LinkedHashMap<>();
         for (User user : repo.getUsers()) {
             ratingUsers.put(user.getUsername(), (double) user.getRatings().size());

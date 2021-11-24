@@ -20,28 +20,27 @@ public abstract class Video {
     }
 
     /**
-     *
-     * @return a
+     * Method implemented in its subclasses
      */
     public abstract Double getRating();
 
     /**
-     * a
-     * @return b
+     * Method that returns the duration of a video
+     * In class Movie is represented by the getter of the field duration
+     * In class Show is overridden
      */
     public abstract int getDuration();
 
     /**
-     * a
-     * @param genre b
-     * @return c
+     * Method that checks if a video belongs to a specific genre
+     * @param genre to be checked
      */
-    public String findGenre(final String genre) {
+    public boolean hasGenre(final String genre) {
         for (String g : genres) {
             if (g.equals(genre)) {
-                return g;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 }

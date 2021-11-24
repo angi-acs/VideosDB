@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * The entry point to this homework. It runs the checker that tests your implentation.
+ * The entry point to this homework. It runs the checker that tests your implementation.
  */
 public final class Main {
     /**
@@ -72,6 +72,10 @@ public final class Main {
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
+        /*
+         * Initializes the repository and iterates through the actions
+         * For every action the result is written in the corresponding file
+         */
         Repository repo = new Repository(input);
         for (Action action : repo.getActions()) {
            arrayResult.add(fileWriter.writeFile(action.getActionId(), "", action.execute(repo)));
