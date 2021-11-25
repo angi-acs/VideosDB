@@ -57,7 +57,7 @@ public class Query extends Action implements Sort, Filter {
                         return "Query result: " + actorsAwards(repo);
                     }
                     case Constants.FILTER_DESCRIPTIONS -> {
-                        return "Query result: " + actorWords(repo);
+                        return "Query result: " + actorsWords(repo);
                     }
                     default ->
                             throw new IllegalStateException("Unexpected value: " + this.criteria);
@@ -125,7 +125,7 @@ public class Query extends Action implements Sort, Filter {
      * @return Alphabetically sorted ArrayList that contains
      * the actors whose career description contains certain words
      */
-    private ArrayList<String> actorWords(final Repository repo) {
+    private ArrayList<String> actorsWords(final Repository repo) {
         List<String> words = filters.get(Constants.WORDS_FILTER);
         LinkedHashMap<String, Double> actors = new LinkedHashMap<>();
 

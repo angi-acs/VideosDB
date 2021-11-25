@@ -1,10 +1,7 @@
 package entertainment;
 
-import lombok.Getter;
-
 import java.util.List;
 
-@Getter
 public abstract class Video {
     private final String title;
     private final int year;
@@ -42,5 +39,21 @@ public abstract class Video {
             }
         }
         return false;
+    }
+
+    public final String getTitle() {
+        return title;
+    }
+
+    public final int getYear() {
+        return year;
+    }
+
+    public final List<String> getCast() {
+        return cast;
+    }
+
+    public final List<String> getGenres() {
+        return genres;
     }
 }

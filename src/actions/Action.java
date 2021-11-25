@@ -1,9 +1,7 @@
 package actions;
 
-import lombok.Getter;
 import repository.Repository;
 
-@Getter
 public abstract class Action {
     private final int actionId;
 
@@ -15,4 +13,8 @@ public abstract class Action {
      * Method implemented in its subclasses
      */
     public abstract String execute(Repository repo);
+
+    public final int getActionId() {
+        return actionId;
+    }
 }

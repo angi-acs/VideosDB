@@ -56,4 +56,6 @@ Query și Recommendation pentru a le atribui câmpurilor valorile citite din inp
 - interfață cu o singură metodă care sortează un map în funcție de parametrii primiți
 - este implementată în clasele Query și Recommendation
 
- 
+### Precizare:
+Commit-urile anterioare conțin implementarea temei cu biblioteca Lombok, dar VmChecker
+nu acceptă acea versiune.

@@ -42,4 +42,8 @@ public final class Show extends Video {
         }
         return duration;
     }
+
+    public ArrayList<Season> getSeasons() {
+        return seasons;
+    }
 }

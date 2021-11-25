@@ -8,7 +8,13 @@ import actor.Actor;
 import common.Constants;
 import entertainment.Movie;
 import entertainment.Show;
-import fileio.*;
+
+import fileio.ActionInputData;
+import fileio.ActorInputData;
+import fileio.Input;
+import fileio.MovieInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
 import repository.Repository;
 import user.User;
 
@@ -111,7 +117,6 @@ public class Helpers {
                             actionData.getType(), actionData.getUsername(), actionData.getGenre());
                     actions.add(recommendation);
                 }
-
                 default -> throw new
                         IllegalStateException("Unexpected value: " + actionData.getActionType());
             }

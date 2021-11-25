@@ -6,13 +6,14 @@ import entertainment.Movie;
 import entertainment.Show;
 import entertainment.Video;
 import fileio.Input;
-import lombok.Getter;
 import user.User;
 import utils.Helpers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-@Getter
+
 public final class Repository {
     private final ArrayList<Actor> actors = new ArrayList<>();
     private final ArrayList<User> users = new ArrayList<>();
@@ -147,5 +148,29 @@ public final class Repository {
             }
         }
         return views;
+    }
+
+    public ArrayList<Actor> getActors() {
+        return actors;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public ArrayList<Movie> getMovies() {
+        return movies;
+    }
+
+    public ArrayList<Show> getShows() {
+        return shows;
+    }
+
+    public ArrayList<Video> getVideos() {
+        return videos;
+    }
+
+    public ArrayList<Action> getActions() {
+        return actions;
     }
 }

@@ -1,12 +1,9 @@
 package user;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 public final class User {
     private final String username;
     private final String subscriptionType;
@@ -22,5 +19,25 @@ public final class User {
         this.favorites = favorites;
         this.history = history;
         this.ratings = new HashMap<>();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getSubscriptionType() {
+        return subscriptionType;
+    }
+
+    public Map<String, Integer> getHistory() {
+        return history;
+    }
+
+    public ArrayList<String> getFavorites() {
+        return favorites;
+    }
+
+    public Map<String, ArrayList<Integer>> getRatings() {
+        return ratings;
     }
 }

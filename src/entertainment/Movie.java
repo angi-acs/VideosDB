@@ -1,11 +1,9 @@
 package entertainment;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+
 public final class Movie extends Video {
     private final int duration;
     private final ArrayList<Double> ratings;
@@ -30,5 +28,14 @@ public final class Movie extends Video {
             rating += i;
         }
         return rating / ratings.size();
+    }
+
+    @Override
+    public int getDuration() {
+        return duration;
+    }
+
+    public ArrayList<Double> getRatings() {
+        return ratings;
     }
 }

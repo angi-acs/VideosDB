@@ -1,0 +1,5 @@
+Starting audit...
+[ERROR] D:\ACS\Anul II\POO\VideosDB\.\src\actions\Query.java:173:50: Inner assignments should be avoided. [InnerAssignment]
+[ERROR] D:\ACS\Anul II\POO\VideosDB\.\src\actions\Query.java:179:53: Inner assignments should be avoided. [InnerAssignment]
+Audit done.
+Checkstyle ends with 2 errors.

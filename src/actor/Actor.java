@@ -1,11 +1,8 @@
 package actor;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Map;
 
-@Getter
 public final class Actor {
     private final String name;
     private final String careerDescription;
@@ -30,5 +27,21 @@ public final class Actor {
             count += award.getValue();
         }
         return count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCareerDescription() {
+        return careerDescription;
+    }
+
+    public ArrayList<String> getFilmography() {
+        return filmography;
+    }
+
+    public Map<ActorsAwards, Integer> getAwards() {
+        return awards;
     }
 }
